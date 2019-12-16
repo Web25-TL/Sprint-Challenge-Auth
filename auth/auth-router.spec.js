@@ -26,6 +26,16 @@ describe('auth-router testing', () => {
                         expect(res.type).toBe('application/json');
                     })
         });
+
+        it('should return a token in the body', () => {
+            return db('users').truncate() // <-start fresh each test
+                    .then(() => {
+                        return request(server).post('/api/auth/register').send({ username: 'Micah', password: 'passness' })
+                    })
+                    .then(res => {
+                        expect(res.body.token).toBeDefined();
+                    })
+        });
     });
 
     describe('logging in a user', () => {
@@ -53,6 +63,19 @@ describe('auth-router testing', () => {
             .then(res => {
                 expect(res.type).toBe('application/json');
             });
-        })
+        });
+
+        it('should return a token in the body', () => {
+            return db('users').truncate() // <-start fresh each test
+            .then(() => { // register a user before logging in that user
+                return request(server).post('/api/auth/register').send({ username: 'Micah', password: 'passness' })
+            })
+            .then(() => {
+                return request(server).post('/api/auth/login').send({ username: 'Micah', password: 'passness' })
+            })
+            .then(res => {
+                expect(res.body.token).toBeDefined();
+            });
+        });
     })
 })
