@@ -4,7 +4,8 @@ const { jwtSecret } = require('../config/secrets.js');
 function genToken(user) {
     const payload = {
         id: user.id,
-        username: user.username
+        username: user.username,
+        admin: user.email === null ? false : true
     };
 
     const options = { expiresIn: '1h' };
