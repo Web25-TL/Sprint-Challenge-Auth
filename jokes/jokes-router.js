@@ -7,6 +7,8 @@ router.get('/', (req, res) => {
     headers: { accept: 'application/json' },
   };
 
+  console.log('admin?', req.decodedJwt.admin);
+
   axios
     .get('https://icanhazdadjoke.com/search', requestOptions)
     .then(response => {
